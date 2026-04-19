@@ -1,3 +1,4 @@
+// Copyright 2026 <Grobforcode>
 #include "Automata.h"
 #include <iostream>
 
@@ -10,12 +11,10 @@ int main() {
     machine.coin(30);                      // ещё 30, всего 80
     machine.choice(4);                     // выбор чая за 80
     // Ожидается: проверка -> приготовление -> завершение
-    // Затем снова WAIT
 
     std::cout << "\n--- Новый заказ ---\n";
     machine.coin(100);                     // ACCEPT
     machine.choice(0);                     // Espresso за 100
-    // Успешно
 
     std::cout << "\n--- Проверка отмены ---\n";
     machine.coin(200);                     // ACCEPT

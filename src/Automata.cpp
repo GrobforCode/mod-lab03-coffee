@@ -1,8 +1,11 @@
+// Copyright 2026 <Grobforcode>
 #include "Automata.h"
 #include <iostream>
+#include <string>
+#include <vector>
 
 Automata::Automata() : cash(0), state(STATES::OFF), selectedDrink(-1) {
-    // Инициализация меню и цен (можно загружать из файла, но для простоты зададим вручную)
+    // Инициализация меню и цен (можно подгружать из файла)
     menu = {"Espresso", "Americano", "Latte", "Cappuccino", "Tea"};
     prices = {100, 120, 150, 150, 80};
 }
@@ -25,7 +28,8 @@ void Automata::coin(int amount) {
     if (state == STATES::WAIT || state == STATES::ACCEPT) {
         cash += amount;
         state = STATES::ACCEPT;
-        std::cout << "Внесено " << amount << " руб. Текущая сумма: " << cash << " руб.\n";
+        std::cout << "Внесено " << amount << " руб. Текущая сумма: "
+                  << cash << " руб.\n";
     }
 }
 
@@ -41,13 +45,15 @@ void Automata::choice(int index) {
     if (state == STATES::ACCEPT) {
         if (index >= 0 && index < static_cast<int>(menu.size())) {
             selectedDrink = index;
-            std::cout << "Выбран напиток: " << menu[index] << " (Цена: " << prices[index] << " руб.)\n";
+            std::cout << "Выбран напиток: " << menu[index]
+                      << " (Цена: " << prices[index] << " руб.)\n";
             state = STATES::CHECK;
             if (check()) {
                 state = STATES::COOK;
                 cook();
             } else {
-                std::cout << "Недостаточно средств. Внесите ещё денег или отмените.\n";
+                std::cout << "Недостаточно средств. "
+                          << "Внесите ещё денег или отмените.\n";
                 state = STATES::ACCEPT;
             }
         } else {
@@ -75,8 +81,8 @@ void Automata::cancel() {
 
 void Automata::cook() {
     if (state == STATES::COOK) {
-        std::cout << "Идёт приготовление напитка \"" << menu[selectedDrink] << "\"...\n";
-        // Имитация процесса
+        std::cout << "Идёт приготовление напитка \""
+                  << menu[selectedDrink] << "\"...\n";
         finish();
     }
 }
@@ -84,7 +90,8 @@ void Automata::cook() {
 void Automata::finish() {
     if (state == STATES::COOK) {
         int change = cash - prices[selectedDrink];
-        std::cout << "Напиток готов! Заберите ваш " << menu[selectedDrink] << ".\n";
+        std::cout << "Напиток готов! Заберите ваш "
+                  << menu[selectedDrink] << ".\n";
         if (change > 0) {
             std::cout << "Ваша сдача: " << change << " руб.\n";
         }
