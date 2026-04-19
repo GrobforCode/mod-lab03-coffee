@@ -1,5 +1,4 @@
-// Copyright 2022 GHA Test Team
-
+// Copyright 2026 <Your Name>
 #include <gtest/gtest.h>
 #include "Automata.h"
 
@@ -34,17 +33,15 @@ TEST(AutomataTest, CancelInAcceptReturnsToWaitAndResetsCash) {
     a.coin(100);
     a.cancel();
     EXPECT_EQ(a.getState(), STATES::WAIT);
-    // Проверяем, что после отмены при следующем coin начинаем с нуля
     a.coin(30);
-    a.choice(0); // недостаточно, но проверяем косвенно
+    a.choice(0);
 }
 
 TEST(AutomataTest, ChoiceWithEnoughMoneyGoesToCookAndThenWait) {
     Automata a;
     a.on();
     a.coin(150);
-    a.choice(2); // Latte за 150
-    // После успешного приготовления состояние должно стать WAIT
+    a.choice(2);  // Latte за 150
     EXPECT_EQ(a.getState(), STATES::WAIT);
 }
 
@@ -52,7 +49,7 @@ TEST(AutomataTest, ChoiceWithInsufficientMoneyStaysInAccept) {
     Automata a;
     a.on();
     a.coin(10);
-    a.choice(0); // Espresso 100
+    a.choice(0);  // Espresso 100
     EXPECT_EQ(a.getState(), STATES::ACCEPT);
 }
 
@@ -62,7 +59,7 @@ TEST(AutomataTest, MultipleCoinsAccumulate) {
     a.coin(50);
     a.coin(40);
     a.coin(10);
-    a.choice(4); // Tea 80, должно хватить
+    a.choice(4);  // Tea 80
     EXPECT_EQ(a.getState(), STATES::WAIT);
 }
 
@@ -70,10 +67,8 @@ TEST(AutomataTest, ChangeIsReturned) {
     Automata a;
     a.on();
     a.coin(200);
-    a.choice(1); // Americano 120, сдача 80
-    // Проверяем, что состояние WAIT, и можно начать заново
+    a.choice(1);  // Americano 120, сдача 80
     EXPECT_EQ(a.getState(), STATES::WAIT);
-    // Новый заказ
     a.coin(50);
     EXPECT_EQ(a.getState(), STATES::ACCEPT);
 }
@@ -81,18 +76,13 @@ TEST(AutomataTest, ChangeIsReturned) {
 TEST(AutomataTest, CannotTurnOffWhenNotInWait) {
     Automata a;
     a.on();
-    a.coin(100); // ACCEPT
-    a.off();     // не должен выключиться
+    a.coin(100);  // ACCEPT
+    a.off();
     EXPECT_EQ(a.getState(), STATES::ACCEPT);
 }
 
 TEST(AutomataTest, GetMenuReturnsNonEmptyList) {
     Automata a;
     auto menu = a.getMenu();
-    EXPECT_GE(menu.size(), 1);
-}
-
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    EXPECT_GE(menu.size(), 1U);
 }
